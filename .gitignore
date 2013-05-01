@@ -10,6 +10,8 @@
 *.csproj
 *.unityproj
 *.sln
+*.pidb
+*.userprefs
 
 #################
 ## Eclipse
