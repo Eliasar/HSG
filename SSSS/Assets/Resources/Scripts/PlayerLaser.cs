@@ -16,7 +16,9 @@ public class PlayerLaser : MonoBehaviour {
         Destroy(gameObject);
     }
 
-    void OnCollisionEnter() {
-        Destroy(gameObject);
+    void OnCollisionEnter(Collision col) {
+        if (col.gameObject.CompareTag("Enemy")) {
+            Destroy(gameObject);
+        }
     }
 }

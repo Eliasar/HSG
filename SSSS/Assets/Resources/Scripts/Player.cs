@@ -11,7 +11,8 @@ public class Player : MonoBehaviour {
     public float shotInterval;
     private float nextShot;
 
-    public GameObject laser_prefab;
+    public GameObject laserPrefab;
+	public GameObject enemyPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -19,7 +20,6 @@ public class Player : MonoBehaviour {
         y = 0;
 
         step = 5;
-        //shotInterval = 1.0f;
         nextShot = 0.0f;
 	}
 	
@@ -42,6 +42,10 @@ public class Player : MonoBehaviour {
         if (Input.GetKey("space")) {
             Fire();
         }
+		
+		if(Input.GetKey (KeyCode.KeypadPlus)) {
+			DEBUG_GenerateEnemy();
+		}
 
         // Actually move the player
         iTween.MoveBy(gameObject, new Vector3(x, y, 0), 0);
@@ -73,7 +77,7 @@ public class Player : MonoBehaviour {
             CalculatePlayerPosition();
 
             // Create instance
-            Instantiate(laser_prefab, playerPos, Quaternion.identity);
+            Instantiate(laserPrefab, playerPos, Quaternion.identity);
 
             // Reset counter
             nextShot = 0.0f;
@@ -81,8 +85,13 @@ public class Player : MonoBehaviour {
     }
 
     private void CalculatePlayerPosition() {
-        playerPos = new Vector3(transform.position.x + transform.localScale.x / 2,
+        playerPos = new Vector3(transform.position.x + transform.localScale.x / 2 +
+                                laserPrefab.transform.localScale.x / 2,
                                 transform.position.y,
                                 0);
     }
+	
+	private void DEBUG_GenerateEnemy() {
+		Instantiate(enemyPrefab, new Vector3(200, 0, 0), Quaternion.identity);
+	}
 }
