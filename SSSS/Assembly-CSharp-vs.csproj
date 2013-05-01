@@ -37,15 +37,16 @@
     <Reference Include="System.XML" />
 	<Reference Include="System.Core" />
 	<Reference Include="UnityEngine">
-	  <HintPath>G:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
 	</Reference>
 	<Reference Include="UnityEditor">
-	  <HintPath>G:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+	  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Resources\Scripts\Enemy.cs" />
-     <Compile Include="Assets\Resources\Scripts\EnemyLaser.cs" />
+     <Compile Include="Assets\Resources\Scripts\Enemies\Drifter.cs" />
+     <Compile Include="Assets\Resources\Scripts\Enemies\DrifterLaser.cs" />
+     <Compile Include="Assets\Resources\Scripts\Enemies\Enemy.cs" />
      <Compile Include="Assets\Resources\Scripts\Player.cs" />
      <Compile Include="Assets\Resources\Scripts\PlayerLaser.cs" />
      <Compile Include="Assets\iTweenPath\iTweenPath.cs" />

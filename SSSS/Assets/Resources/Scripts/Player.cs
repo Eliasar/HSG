@@ -14,6 +14,10 @@ public class Player : MonoBehaviour {
     public GameObject laserPrefab;
 	public GameObject enemyPrefab;
 
+    public float height;
+    public float width;
+    public float ortho;
+
 	// Use this for initialization
 	void Start () {
         x = -100;
@@ -21,31 +25,27 @@ public class Player : MonoBehaviour {
 
         step = 5;
         nextShot = 0.0f;
+        Camera mainCamera = Camera.mainCamera;
+        ortho = mainCamera.orthographicSize;
+        height = mainCamera.orthographicSize;
+        width = height * mainCamera.aspect;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetKey("w")) {
-            MoveUp();
-        }
-        else if (Input.GetKey("s")) {
-            MoveDown();
-        }
+        if (Input.GetKey("w")) { MoveUp(); }
+        else if (Input.GetKey("s")) { MoveDown(); }
 
-        if (Input.GetKey("a")) {
-            MoveLeft();
-        }
-        else if (Input.GetKey("d")) {
-            MoveRight();
-        }
+        if (Input.GetKey("a")) { MoveLeft(); }
+        else if (Input.GetKey("d")) { MoveRight(); }
 
-        if (Input.GetKey("space")) {
-            Fire();
-        }
+        if (Input.GetKey("space")) { Fire(); }
 		
-		if(Input.GetKey (KeyCode.KeypadPlus)) {
-			DEBUG_GenerateEnemy();
-		}
+		if (Input.GetKeyDown(KeyCode.KeypadPlus)) { DEBUG_GenerateEnemy(); }
+
+        // DEBUG
+        //Debug.Log("x = " + x + "; y = " + y);
+        //Debug.Log(height - transform.localScale.y / 2);
 
         // Actually move the player
         iTween.MoveBy(gameObject, new Vector3(x, y, 0), 0);
@@ -55,19 +55,31 @@ public class Player : MonoBehaviour {
 	}
 
     private void MoveUp() {
-        y += step;
+        if (transform.position.y <= height - transform.localScale.y)
+            y += step;
+        else
+            y = 0;
     }
 
     private void MoveDown() {
-        y -= step;
+        if (transform.position.y >= -height + transform.localScale.y)
+            y -= step;
+        else
+            y = 0;
     }
 
     private void MoveLeft() {
-        x -= step;
+        if (transform.position.x >= -width + transform.localScale.x)
+            x -= step;
+        else
+            x = 0;
     }
 
     private void MoveRight() {
-        x += step;
+        if (transform.position.x <= width - transform.localScale.x)
+            x += step;
+        else
+            x = 0;
     }
 
     private void Fire() {

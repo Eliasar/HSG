@@ -4,8 +4,11 @@ using System.Collections;
 public class PlayerLaser : MonoBehaviour {
 
     public int speed;
+    public int power;
 
 	void Start () {
+        speed = 10;
+        power = 1;
 	}
 	
 	void Update () {

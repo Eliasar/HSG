@@ -1,12 +1,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class Enemy : MonoBehaviour {
-
-    private float delta;
+public class Drifter : Enemy {
 
 	// Use this for initialization
 	void Start () {
+        HP = 1;
+
 		int rand = Random.Range(0, 2);
 		
 		switch(rand) {
@@ -22,21 +22,4 @@ public class Enemy : MonoBehaviour {
 			break;
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-        delta += Time.deltaTime;
-	}
-	
-	void OnBecameInvisible() {
-        // Grace period for spawning
-        if(delta >= 1.0f)
-            Destroy(gameObject);
-    }
-
-    void OnCollisionEnter(Collision col) {
-        if (col.gameObject.CompareTag("Player Laser")) {
-            Destroy(gameObject);
-        }
-    }
 }
