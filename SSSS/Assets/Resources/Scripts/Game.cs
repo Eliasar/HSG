@@ -4,12 +4,15 @@ using System.Collections;
 public class Game : MonoBehaviour {
 
     public GameObject player;
-    public GUIText gameOver;
+    public GameObject startText;
+    public GameObject gameOverText;
     private bool gameOverBool;
 
 	// Use this for initialization
 	void Start () {
         gameOverBool = false;
+        startText.guiText.enabled = true;
+        Instantiate(startText, new Vector3(0.5f, 0.5f, 0), Quaternion.identity);
 	}
 	
 	// Update is called once per frame
@@ -32,7 +35,7 @@ public class Game : MonoBehaviour {
 
     void GameOver() {
         if (!gameOverBool) {
-            Instantiate(gameOver, Vector3.zero, Quaternion.identity);
+            Instantiate(gameOverText, new Vector3(0.5f, 0.5f, 0), Quaternion.identity);
             gameOverBool = true;
         }
     }
