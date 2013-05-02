@@ -16,8 +16,9 @@ public class Player : MonoBehaviour {
     public float respawnTimer;
     public float respawnLimit;
 
-    private float justSpawnedTimer;
-    private float justSpawnedLimit;
+    private float invulnerableTimer;
+    private float invulnerableLimit;
+    public bool vulnerable;
 
     public GameObject laserPrefab;
 	public GameObject enemyPrefab;
@@ -26,40 +27,20 @@ public class Player : MonoBehaviour {
     float height;
     float width;
 
-    public void init() {
-        x = -100;
-        y = 0;
-
-        step = 2;
-        //shotInterval = 0.2f;
-        nextShot = 0.0f;
-        HP = 5;
-        respawnTimer = 0.0f;
-        respawnLimit = 5.0f;
-        Camera mainCamera = Camera.mainCamera;
-        height = mainCamera.orthographicSize;
-        width = height * mainCamera.aspect;
-
-        justSpawnedTimer = 0.0f;
-        justSpawnedLimit = 2.0f;
-
-        InvokeRepeating("FlashPlayer", 0, 0.05f);
-    }
-
-	// Use this for initialization
 	void Start () {
         livesLeft = 2;
         init();
 	}
 	
-	// Update is called once per frame
 	void LateUpdate () {
-        // Flash Player if just spawned
-        if (justSpawnedTimer < justSpawnedLimit) {
-            justSpawnedTimer += Time.deltaTime;
+
+        // Check if player is invulnerable
+        if (invulnerableTimer < invulnerableLimit) {
+            invulnerableTimer += Time.deltaTime;
         } else {
             CancelInvoke();
             renderer.enabled = true;
+            vulnerable = true;
         }
 
         if (gameObject.activeSelf) {
@@ -88,17 +69,38 @@ public class Player : MonoBehaviour {
                 init();
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.KeypadPlus)) { DEBUG_GenerateEnemy(); }
 	}
 
+    public void init() {
+        x = -100;
+        y = 0;
+
+        step = 2;
+        shotInterval = 0.2f;
+        nextShot = 0.0f;
+        HP = 5;
+        respawnTimer = 0.0f;
+        respawnLimit = 5.0f;
+        Camera mainCamera = Camera.mainCamera;
+        height = mainCamera.orthographicSize;
+        width = height * mainCamera.aspect;
+
+        invulnerableTimer = 0.0f;
+        invulnerableLimit = 2.0f;
+        vulnerable = true;
+
+        //FlashPlayer();
+    }
+
     void OnCollisionEnter(Collision col) {
-        if (enabled) {
+        if (enabled && vulnerable) {
             if (col.gameObject.CompareTag("Enemy")) {
                 Hit(1);
+                FlashPlayer();
             }
             else if (col.gameObject.CompareTag("Enemy Laser")) {
                 Hit(col.gameObject.GetComponent<DrifterLaser>().power);
+                FlashPlayer();
             }
         }
     }
@@ -154,10 +156,16 @@ public class Player : MonoBehaviour {
         }
     }
 
-    private void FlashPlayer() {
+    public void FlashPlayer(float frequency = 0.05f) {
+        invulnerableTimer = 0.0f;
+        vulnerable = false;
+        InvokeRepeating("FlashHelper", 0, frequency);
+    }
+
+    private void FlashHelper() {
         renderer.enabled = !renderer.enabled;
     }
-	
+    
 	private void DEBUG_GenerateEnemy() {
 		Instantiate(enemyPrefab, new Vector3(200, 0, 0), Quaternion.identity);
 	}

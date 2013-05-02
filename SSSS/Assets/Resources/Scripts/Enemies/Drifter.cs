@@ -35,6 +35,5 @@ public class Drifter : Enemy {
             base.Fire();
             shotInterval = 0.0f;
         }
-        
     }
 }

@@ -17,9 +17,6 @@ public class Enemy : MonoBehaviour {
     protected virtual void Update() {
         if(spawnTimerGrace <= gracePeriod)
             spawnTimerGrace += Time.deltaTime;
-
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
-            Fire();
     }
 
     void OnBecameInvisible() {
@@ -31,8 +28,8 @@ public class Enemy : MonoBehaviour {
         if (col.gameObject.CompareTag("Player Laser")) {
             Hit(col.gameObject.GetComponent<PlayerLaser>().power);
         }
-
-        if (col.gameObject.CompareTag("Player")) {
+        if (col.gameObject.CompareTag("Player") && 
+            col.gameObject.GetComponent<Player>().vulnerable) {
             Hit(100);
         }
     }
