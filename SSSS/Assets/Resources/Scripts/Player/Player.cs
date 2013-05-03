@@ -21,7 +21,6 @@ public class Player : MonoBehaviour {
     public bool vulnerable;
 
     public GameObject laserPrefab;
-	public GameObject enemyPrefab;
     public GameObject explosionPrefab;
 
     float height;
@@ -88,8 +87,6 @@ public class Player : MonoBehaviour {
         invulnerableTimer = 0.0f;
         invulnerableLimit = 2.0f;
         vulnerable = true;
-
-        //FlashPlayer();
     }
 
     void OnCollisionEnter(Collision col) {
@@ -153,6 +150,10 @@ public class Player : MonoBehaviour {
             livesLeft--;
             Instantiate(explosionPrefab, transform.position, Quaternion.identity);
             gameObject.SetActive(false);
+
+            if (livesLeft <= 0) {
+                GameObject.FindGameObjectWithTag("GM").GetComponent<Game>().GameOver();
+            }
         }
     }
 
@@ -165,8 +166,4 @@ public class Player : MonoBehaviour {
     private void FlashHelper() {
         renderer.enabled = !renderer.enabled;
     }
-    
-	private void DEBUG_GenerateEnemy() {
-		Instantiate(enemyPrefab, new Vector3(200, 0, 0), Quaternion.identity);
-	}
 }

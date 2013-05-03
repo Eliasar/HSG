@@ -8,22 +8,22 @@ public class Game : MonoBehaviour {
     public GameObject drifterPrefab;
     public GameObject startText;
     public GameObject gameOverText;
-    public bool gameOverBool;
+    //public bool gameOverBool;
     public bool levelFinished;
     public int currentLevel;
 
-	// Use this for initialization
-	void Start () {
+    void Awake() {
+        Application.targetFrameRate = 60;
+    }
+
+	void Start() {
         LoadLevel(1);
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update() {
         
         if (!player.activeSelf && playerComp.livesLeft > 0)
             RespawnPlayer();
-        if (playerComp.livesLeft == 0)
-            GameOver();
 
         if (levelFinished) {
             levelFinished = false;
@@ -42,8 +42,14 @@ public class Game : MonoBehaviour {
         }
     }
 
-    void GameOver() {
+    public void GameOver() {
         Instantiate(gameOverText, new Vector3(0.5f, 0.5f, 0), Quaternion.identity);
+        StartCoroutine(GameOverHelper());
+    }
+
+    private IEnumerator GameOverHelper() {
+        yield return new WaitForSeconds(5.0f);
+        Application.LoadLevel(0);
     }
 
     void CreateDrifter() {
@@ -51,24 +57,26 @@ public class Game : MonoBehaviour {
     }
 
     void LoadLevel(int level) {
-        gameOverBool = false;
         levelFinished = false;
         playerComp = player.GetComponent<Player>();
         startText.guiText.enabled = true;
         startText.guiText.text = "Level " + level;
         Instantiate(startText, new Vector3(0.5f, 0.5f, 0), Quaternion.identity);
 
+        // TODO: Level editor
         float frequency = 1.0f / currentLevel;
+        if (frequency < 0.125f) frequency = 0.125f;
         int amount = 5 * currentLevel;
+        if (amount > 50) amount = 50;
 
+        // TODO: When powerups are created
         playerComp.shotInterval = .2f / currentLevel;
+        if (playerComp.shotInterval < .05f) playerComp.shotInterval = .05f;
 
         StartCoroutine(LevelCoroutine("drifter", frequency, amount));
     }
 
     IEnumerator LevelCoroutine(string type, float frequency, int amount) {
-        print("Level " + currentLevel + " Coroutine started.");
-        print("frequency: " + frequency + "; amount: " + amount);
         for (int i = 0; i < amount; i++) {
             if(type.Equals("drifter")) CreateDrifter();
             yield return new WaitForSeconds(frequency);
@@ -78,7 +86,6 @@ public class Game : MonoBehaviour {
             yield return null;
         }
 
-        print("Level " + currentLevel + " Coroutine ended.");
         levelFinished = true;
     }
 

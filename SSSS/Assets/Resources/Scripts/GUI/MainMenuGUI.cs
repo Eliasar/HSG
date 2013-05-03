@@ -9,6 +9,10 @@ public class MainMenuGUI : MonoBehaviour {
     void OnGUI() {
         GUI.skin = mySkin;
 
+        // Calculate best size for Title label font size & button font size
+        titleStyle.fontSize = Screen.width / 20;
+        GUI.skin.button.fontSize = Screen.width / 40;
+
         GUILayout.BeginArea(new Rect(10, 10, Screen.width-20, Screen.height-20));
             GUILayout.FlexibleSpace();
             GUILayout.Label("Side Scrolling Space Shooter", titleStyle);
@@ -22,7 +26,7 @@ public class MainMenuGUI : MonoBehaviour {
                 GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
             GUILayout.FlexibleSpace();
-            GUILayout.Label("Copyright Mike Wells TM 2013");
+            GUILayout.Label("Copyright © 2013 Mike Wells, Tarnation Gaming™");
         GUILayout.EndArea();
     }
 }

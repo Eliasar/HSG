@@ -5,7 +5,7 @@ public class Enemy : MonoBehaviour {
 
     public int HP;
     public float spawnTimerGrace;
-    private float gracePeriod;
+    public float gracePeriod;
     public GameObject laserPrefab;
     public GameObject explosionPrefab;
 
@@ -19,18 +19,23 @@ public class Enemy : MonoBehaviour {
             spawnTimerGrace += Time.deltaTime;
     }
 
-    void OnBecameInvisible() {
-        if (spawnTimerGrace >= gracePeriod)
+    protected virtual void OnBecameInvisible() {
+        /*if (spawnTimerGrace >= gracePeriod) {
             Destroy(gameObject);
+        }*/
     }
 
     void OnCollisionEnter(Collision col) {
-        if (col.gameObject.CompareTag("Player Laser")) {
-            Hit(col.gameObject.GetComponent<PlayerLaser>().power);
-        }
-        if (col.gameObject.CompareTag("Player") && 
-            col.gameObject.GetComponent<Player>().vulnerable) {
-            Hit(100);
+        if (gameObject.renderer.isVisible) {
+            if (col.gameObject.CompareTag("Player Laser"))
+            {
+                Hit(col.gameObject.GetComponent<PlayerLaser>().power);
+            }
+            if (col.gameObject.CompareTag("Player") &&
+                col.gameObject.GetComponent<Player>().vulnerable)
+            {
+                Hit(100);
+            }
         }
     }
 

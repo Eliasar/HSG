@@ -32,6 +32,7 @@ public class DrifterLaser : MonoBehaviour {
 
     void OnCollisionEnter(Collision col) {
         if (col.gameObject.CompareTag("Player")) {
+            print("I hit the player!");
             Destroy(gameObject);
         }
     }
